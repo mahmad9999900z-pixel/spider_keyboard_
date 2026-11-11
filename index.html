@@ -7,44 +7,37 @@
 <title>🕷️ Spider-Man Ultimate Keyboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;700;900&family=Tajawal:wght@400;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* ================= RESET & VARIABLES ================= */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root {
   --miles-red: #e62429;
   --miles-blue: #00d2ff;
   --bg-dark: #06060a;
-  --glass-bg: rgba(10, 10, 15, 0.7);
+  --glass-bg: rgba(10, 10, 15, 0.75);
   --glass-border: rgba(255, 255, 255, 0.15);
-  --kb-font: 'Cairo', sans-serif; /* الخط الافتراضي */
+  --kb-font: 'Cairo', sans-serif;
 }
 html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: var(--bg-dark); color: #fff; user-select: none; -webkit-user-select: none; }
 
-/* ================= الخلفية ================= */
-.bg-image {
-  position: fixed; inset: 0; z-index: 0;
-  /* 🚨 ضع رابط صورتك هنا 🚨 */
-  background-image: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1080&auto=format&fit=crop'); 
-  background-size: cover;
-  background-position: center;
-  animation: panZoom 25s infinite alternate ease-in-out;
-}
+/* الخلفية */
+.bg-image { position: fixed; inset: 0; z-index: 0; background-image: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1080&auto=format&fit=crop'); background-size: cover; background-position: center; animation: panZoom 25s infinite alternate ease-in-out; }
 @keyframes panZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
-.bg-overlay { position: fixed; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(6,6,10,0.2) 0%, rgba(6,6,10,0.8) 50%, rgba(6,6,10,0.98) 100%); }
+.bg-overlay { position: fixed; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(6,6,10,0.2) 0%, rgba(6,6,10,0.85) 50%, rgba(6,6,10,0.98) 100%); pointer-events: none; }
 .embers { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
 .ember { position: absolute; bottom: -20px; width: 4px; height: 4px; background: #ff4500; border-radius: 50%; box-shadow: 0 0 10px #ff4500; animation: floatUp linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 0.5; } 100% { transform: translateY(-110vh) translateX(40px) scale(0); opacity: 0; } }
 
-/* ================= التطبيق ================= */
-.app { position: relative; z-index: 10; height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+/* التطبيق */
+.app { position: relative; z-index: 10; height: 100vh; height: 100dvh; display: flex; flex-direction: column; padding-bottom: 280px; /* مساحة للكيبورد */ transition: padding 0.3s ease; }
+.app.floating-active { padding-bottom: 0; }
 
 /* الشريط العلوي */
 .top-bar { display: flex; justify-content: space-between; padding: 15px 20px; align-items: center; }
-.icon-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; backdrop-filter: blur(10px); transition: 0.3s; }
-.icon-btn:hover { background: var(--miles-red); }
+.icon-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; backdrop-filter: blur(10px); transition: 0.3s; z-index: 101; }
+.icon-btn:active { background: var(--miles-red); transform: scale(0.9); }
 
-/* إطار صورة سبايدر مان */
+/* صورة البطل */
 .hero-image-container { display: flex; justify-content: center; margin-top: 5px; }
-.hero-image { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--miles-red); box-shadow: 0 0 20px var(--miles-red); object-fit: cover; object-position: top; transition: 0.3s; }
+.hero-image { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--miles-red); box-shadow: 0 0 20px var(--miles-red); object-fit: cover; object-position: top; transition: 0.3s; }
 
 /* شاشة العرض */
 .display-container { flex: 1; padding: 15px; display: flex; align-items: center; justify-content: center; }
@@ -53,38 +46,37 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
 .cursor { display: inline-block; width: 2px; height: 1.2em; background: var(--miles-red); vertical-align: middle; animation: blink 1s infinite; box-shadow: 0 0 10px var(--miles-red); }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 
-/* ================= الكيبورد ================= */
+/* الكيبورد */
 .keyboard-wrapper { 
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
   padding: 10px 10px calc(15px + env(safe-area-inset-bottom, 0px)); 
-  background: linear-gradient(to bottom, rgba(6,6,10,0.9), rgba(6,6,10,0.98)); 
+  background: linear-gradient(to bottom, rgba(6,6,10,0.95), rgba(6,6,10,1)); 
   border-top: 1px solid rgba(230, 36, 41, 0.4); 
   backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
   box-shadow: 0 -10px 50px rgba(0, 210, 255, 0.1); 
-  transition: transform 0.3s ease;
+  transition: height 0.3s, width 0.3s, border-radius 0.3s;
 }
-/* وضع الكيبورد العائم */
 .keyboard-wrapper.floating {
-  top: 50%; bottom: auto; left: 50%; right: auto;
-  transform: translate(-50%, -50%);
-  width: 95vw; border-radius: 15px; border: 1px solid var(--miles-red);
-  box-shadow: 0 0 40px rgba(230,36,41,0.3);
+  bottom: auto; top: 150px; left: 5%; width: 90%; 
+  border-radius: 15px; border: 1px solid var(--miles-red);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 30px rgba(230,36,41,0.4);
 }
 
 /* مقبض السحب */
 .drag-handle {
-  display: none; width: 60px; height: 6px; background: rgba(255,255,255,0.3);
-  border-radius: 10px; margin: 0 auto 10px auto; cursor: grab;
+  display: none; width: 80px; height: 30px; background: rgba(255,255,255,0.05);
+  border-radius: 15px; margin: 0 auto 10px auto; cursor: grab;
+  justify-content: center; align-items: center; touch-action: none;
 }
-.keyboard-wrapper.floating .drag-handle { display: block; }
-.drag-handle:active { cursor: grabbing; }
+.drag-handle::before { content: '≡'; font-size: 20px; color: rgba(255,255,255,0.5); }
+.keyboard-wrapper.floating .drag-handle { display: flex; }
 
 /* شريط اللغة */
 .lang-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; overflow-x: auto; scrollbar-width: none; }
 .lang-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
-.lang-btn.active { background: rgba(230, 36, 41, 0.2); color: #fff; border-color: var(--miles-red); }
+.lang-btn.active { background: rgba(230, 36, 41, 0.3); color: #fff; border-color: var(--miles-red); }
 
-/* الصفوف والأزرار */
+/* الأزرار */
 .keyboard { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; }
 .kb-row { display: flex; gap: 5px; justify-content: center; }
 .key {
@@ -93,17 +85,17 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
   color: #fff; font-family: var(--kb-font); font-size: 22px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 0 rgba(0,0,0,0.8);
-  transition: transform 0.05s, box-shadow 0.05s, background 0.2s;
-  touch-action: manipulation;
+  transition: transform 0.05s, box-shadow 0.05s; touch-action: manipulation;
 }
 .key:active, .key.pressed { transform: translateY(4px); box-shadow: 0 0 0 rgba(0,0,0,0.8), 0 0 20px var(--miles-blue); background: linear-gradient(180deg, rgba(60,60,70,0.9) 0%, rgba(30,30,40,0.9) 100%); }
 .key.special { background: linear-gradient(180deg, rgba(230, 36, 41, 0.8) 0%, rgba(150, 20, 25, 0.9) 100%); border-color: rgba(255,100,100,0.3); }
 .key.space { background: linear-gradient(180deg, rgba(20,20,25,0.9) 0%, rgba(10,10,15,0.9) 100%); }
+.key.shift-on { background: linear-gradient(180deg, var(--miles-blue) 0%, #0088aa 100%); color: #000; }
 .w-2 { flex: 2; } .w-3 { flex: 3; } .w-5 { flex: 5; }
 .spider-icon { width: 26px; height: 26px; }
 
-/* ================= قائمة الإعدادات (المودال) ================= */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 999; display: none; align-items: center; justify-content: center; }
+/* الإعدادات */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 9999; display: none; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
 .modal-content { background: #15151a; border: 1px solid var(--miles-red); border-radius: 20px; width: 90%; max-width: 400px; padding: 20px; box-shadow: 0 0 30px rgba(230,36,41,0.3); }
 .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; text-align: center; color: var(--miles-red); }
@@ -111,29 +103,26 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
 .setting-label { font-size: 14px; color: #aaa; margin-bottom: 8px; display: block; }
 .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .option-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: inherit; font-size: 14px; }
-.option-btn.active { background: var(--miles-red); border-color: var(--miles-red); }
+.option-btn:active { transform: scale(0.95); }
+.option-btn.active { background: var(--miles-red); border-color: var(--miles-red); box-shadow: 0 0 10px rgba(230,36,41,0.5); }
 .close-modal { width: 100%; padding: 12px; background: #fff; color: #000; font-weight: bold; border: none; border-radius: 10px; margin-top: 10px; cursor: pointer; }
 
-@media (max-height: 700px) { .key { height: 44px; font-size: 19px; } .hero-image { width: 80px; height: 80px; } .display-box { font-size: 18px; max-height: 150px; } }
+@media (max-height: 700px) { .key { height: 44px; font-size: 19px; } .hero-image { width: 80px; height: 80px; } .display-box { font-size: 18px; max-height: 130px; } }
 </style>
 </head>
 <body>
 
-<!-- الخلفية -->
 <div class="bg-image"></div>
 <div class="bg-overlay"></div>
 <div class="embers" id="embers"></div>
 
-<!-- التطبيق -->
-<div class="app">
+<div class="app" id="app-container">
   <div class="top-bar">
-    <button class="icon-btn" onclick="toggleFloatMode()" title="سحب الكيبورد">↕️</button>
-    <button class="icon-btn" onclick="openSettings()" title="الإعدادات">⚙️</button>
+    <button class="icon-btn" id="btn-float" onclick="toggleFloatMode()" title="سحب الكيبورد">↕️</button>
+    <button class="icon-btn" id="btn-settings" onclick="openSettings()" title="الإعدادات">⚙️</button>
   </div>
 
-  <!-- صورة سبايدر مان -->
   <div class="hero-image-container">
-    <!-- 🚨 ضع رابط صورة مايلز موراليس هنا 🚨 -->
     <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=400&auto=format&fit=crop" class="hero-image" alt="Spider-Man">
   </div>
 
@@ -144,14 +133,12 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
   </div>
 </div>
 
-<!-- الكيبورد -->
 <div class="keyboard-wrapper" id="kb-wrapper">
   <div class="drag-handle" id="drag-handle"></div>
   <div class="lang-bar" id="lang-bar"></div>
   <div class="keyboard" id="keyboard"></div>
 </div>
 
-<!-- قائمة الإعدادات -->
 <div class="modal-overlay" id="settings-modal">
   <div class="modal-content">
     <div class="modal-title">إعدادات التطبيق ⚙️</div>
@@ -159,10 +146,10 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
     <div class="setting-group">
       <span class="setting-label">نوع الصوت:</span>
       <div class="options-grid" id="sound-options">
-        <button class="option-btn active" onclick="setSound('fire')">🔥 نار</button>
-        <button class="option-btn" onclick="setSound('water')">💧 ماء</button>
-        <button class="option-btn" onclick="setSound('gun')">🔫 طلقة</button>
-        <button class="option-btn" onclick="setSound('none')">🔇 بدون</button>
+        <button class="option-btn active" onclick="setSound('fire', this)">🔥 نار</button>
+        <button class="option-btn" onclick="setSound('water', this)">💧 ماء</button>
+        <button class="option-btn" onclick="setSound('gun', this)">🔫 طلقة</button>
+        <button class="option-btn" onclick="setSound('none', this)">🔇 بدون</button>
       </div>
     </div>
 
@@ -181,13 +168,13 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
 </div>
 
 <script>
-// ================= الحالة =================
+// إعدادات الحالة
 const state = { 
   currentLang: 'ar', layout: 'ar', shift: false, capsLock: false, text: '',
   soundType: 'fire', isFloating: false
 };
 
-// ================= التخطيطات =================
+// التخطيطات
 const langNames = { ar: 'العربية', en: 'English', fr: 'Français', es: 'Español', ru: 'Русский' };
 const layouts = {
   ar: [['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج'],['ش','س','ي','ب','ل','ا','ت','ن','م','ك','ط'],['SHIFT','ئ','ء','ؤ','ر','لا','ى','ة','و','ز','ظ','DEL'],['NUM','LANG_AR','SPACE','ENTER']],
@@ -200,15 +187,15 @@ const layouts = {
 };
 let lastShiftTap = 0;
 
-// ================= الإعدادات (المودال) =================
+// الإعدادات
 function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
 
-function setSound(type) {
+function setSound(type, btn) {
   state.soundType = type;
-  document.querySelectorAll('#sound-options .option-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  playCurrentSound(); // تجربة الصوت
+  document.querySelectorAll('#sound-options .option-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  playCurrentSound();
 }
 
 function setFont(fontName, btn) {
@@ -217,52 +204,53 @@ function setFont(fontName, btn) {
   btn.classList.add('active');
 }
 
-// ================= وضع الكيبورد العائم =================
+// سحب الكيبورد
 function toggleFloatMode() {
   const wrapper = document.getElementById('kb-wrapper');
+  const app = document.getElementById('app-container');
   state.isFloating = !state.isFloating;
+  
   if (state.isFloating) {
     wrapper.classList.add('floating');
-    if (!wrapper.style.top) {
-      wrapper.style.top = '50%';
-      wrapper.style.left = '50%';
-      wrapper.style.transform = 'translate(-50%, -50%)';
-    }
+    app.classList.add('floating-active');
   } else {
     wrapper.classList.remove('floating');
-    wrapper.style.top = ''; wrapper.style.left = ''; wrapper.style.transform = '';
+    app.classList.remove('floating-active');
+    wrapper.style.top = '150px'; // إعادة تعيين الموضع الافتراضي
   }
   vibrate();
 }
 
-// سحب الكيبورد (Drag Logic)
+// برمجة سحب الكيبورد من المقبض
 const wrapper = document.getElementById('kb-wrapper');
 const dragHandle = document.getElementById('drag-handle');
-let isDragging = false, startX, startY, initialX, initialY;
+let isDragging = false, startY, startTop;
 
 dragHandle.addEventListener('pointerdown', (e) => {
   if (!state.isFloating) return;
   isDragging = true;
-  startX = e.clientX; startY = e.clientY;
-  const rect = wrapper.getBoundingClientRect();
-  initialX = rect.left; initialY = rect.top;
-  wrapper.style.transform = 'none'; // إزالة translate للسماح بالسحب
-  wrapper.style.left = initialX + 'px';
-  wrapper.style.top = initialY + 'px';
+  startY = e.clientY;
+  startTop = wrapper.offsetTop;
+  dragHandle.style.cursor = 'grabbing';
+  e.preventDefault(); // منع التمرير
 });
 
 document.addEventListener('pointermove', (e) => {
   if (!isDragging) return;
-  e.preventDefault();
-  const dx = e.clientX - startX;
   const dy = e.clientY - startY;
-  wrapper.style.left = (initialX + dx) + 'px';
-  wrapper.style.top = (initialY + dy) + 'px';
+  let newTop = startTop + dy;
+  // منع الكيبورد من الخروج عن الشاشة
+  if (newTop < 50) newTop = 50;
+  if (newTop > window.innerHeight - 200) newTop = window.innerHeight - 200;
+  wrapper.style.top = newTop + 'px';
 });
 
-document.addEventListener('pointerup', () => { isDragging = false; });
+document.addEventListener('pointerup', () => {
+  isDragging = false;
+  dragHandle.style.cursor = 'grab';
+});
 
-// ================= بناء الكيبورد =================
+// بناء الكيبورد
 function renderLangBar() {
   const bar = document.getElementById('lang-bar'); bar.innerHTML = '';
   Object.keys(langNames).forEach(code => {
@@ -291,6 +279,8 @@ function renderKeyboard() {
       else { btn.textContent = (state.shift || state.capsLock) && ['en','fr','es','ru'].includes(state.layout) ? key.toUpperCase() : key; }
       
       if (isSpecial && !btn.classList.contains('space')) btn.classList.add('special');
+      
+      // استخدام touchstart و mousedown لضمان العمل على كل الأجهزة
       btn.addEventListener('pointerdown', (e) => { e.preventDefault(); handleKey(key, btn); });
       rowEl.appendChild(btn);
     });
@@ -326,7 +316,7 @@ function updateText() {
   disp.scrollTop = disp.scrollHeight;
 }
 
-// ================= الأصوات (Web Audio API) =================
+// الأصوات
 function vibrate() { if (navigator.vibrate) navigator.vibrate(10); }
 let audioCtx;
 function playCurrentSound() {
@@ -337,10 +327,7 @@ function playCurrentSound() {
     const now = audioCtx.currentTime;
     
     if (state.soundType === 'fire') {
-      // صوت نار
-      const bufferSize = audioCtx.sampleRate * 0.15;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
+      const bufferSize = audioCtx.sampleRate * 0.15; const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
       const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
       const filter = audioCtx.createBiquadFilter(); filter.type = 'bandpass'; filter.frequency.setValueAtTime(1000, now); filter.frequency.exponentialRampToValueAtTime(300, now + 0.15);
@@ -348,11 +335,10 @@ function playCurrentSound() {
       noise.connect(filter).connect(gain).connect(audioCtx.destination); noise.start(now);
     } 
     else if (state.soundType === 'water') {
-      // صوت ماء (قطرة)
-      const osc = audioCtx.createOscillator(); osc.type = 'sine'; 
-      osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+      const osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
       const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
       osc.connect(gain).connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.1);
     } 
     else if (state.soundType === 'gun') {
-  
+      const osc = audioCtx.createOscillator(); osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.05);
+      const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4, now); gain.gain.exponentialRampToValueA
