@@ -3,117 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0a0a10">
-<title>🕷️ Spider-Man Pro Keyboard</title>
+<meta name="theme-color" content="#06060a">
+<title>🕷️ Spider-Man Keyboard Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 /* ================= RESET & VARIABLES ================= */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root {
-  --spider-red: #e62429;
-  --spider-red-dark: #9e1419;
-  --spider-blue: #0b1b3d;
-  --spider-blue-light: #1a3c75;
-  --spider-black: #06060a;
-  --white: #ffffff;
-  --glass: rgba(15, 15, 25, 0.65);
-  --glass-border: rgba(230, 36, 41, 0.3);
-  --neon-glow: 0 0 15px rgba(230, 36, 41, 0.6);
+  --miles-red: #e62429;
+  --miles-blue: #00d2ff; /* لون الكهرباء الأزرق لمايلز */
+  --bg-dark: #06060a;
+  --glass-bg: rgba(10, 10, 15, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
-html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: var(--spider-black); color: var(--white); user-select: none; -webkit-user-select: none; }
+html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; background: var(--bg-dark); color: #fff; user-select: none; -webkit-user-select: none; }
 
-/* ================= ANIMATED BACKGROUND ================= */
-.bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(circle at 50% 0%, #1a0505 0%, #06060a 100%); }
-.city-skyline { position: absolute; bottom: 0; width: 100%; height: 40%; opacity: 0.4; }
-.city-skyline svg { width: 100%; height: 100%; display: block; }
+/* ================= الخلفية المتحركة ================= */
+.bg-image {
+  position: fixed; inset: 0; z-index: 0;
+  /* 🚨 ضع رابط صورتك هنا بدلاً من الرابط الحالي 🚨 */
+  background-image: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1080&auto=format&fit=crop'); 
+  background-size: cover;
+  background-position: center;
+  animation: panZoom 25s infinite alternate ease-in-out;
+}
+@keyframes panZoom {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-2%, -2%); }
+}
 
-/* الخيوط والشبكة */
-.web-pattern { position: absolute; top: -10%; right: -10%; width: 80vmin; height: 80vmin; opacity: 0.15; animation: slowSpin 120s linear infinite; }
-.web-pattern-bottom { position: absolute; bottom: -20%; left: -10%; width: 70vmin; height: 70vmin; opacity: 0.1; animation: slowSpin 150s linear infinite reverse; }
-@keyframes slowSpin { to { transform: rotate(360deg); } }
+/* طبقة التعتيم لبروز الكيبورد */
+.bg-overlay {
+  position: fixed; inset: 0; z-index: 1;
+  background: linear-gradient(to bottom, rgba(6,6,10,0.1) 0%, rgba(6,6,10,0.7) 40%, rgba(6,6,10,0.98) 100%);
+}
 
-/* العنكبوت المتحرك */
-.hanging-spider { position: absolute; top: -50px; right: 15%; animation: swing 6s ease-in-out infinite alternate, dropDown 2s ease-out forwards; z-index: 2; }
-@keyframes dropDown { 0% { top: -100px; } 100% { top: 50px; } }
-@keyframes swing { 0% { transform: rotate(-15deg); } 100% { transform: rotate(15deg); } }
-.spider-thread { width: 1px; height: 100px; background: rgba(255,255,255,0.4); margin: 0 auto; }
+/* شرارات النار المتطايرة */
+.embers { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.ember {
+  position: absolute; bottom: -20px; width: 4px; height: 4px;
+  background: #ff4500; border-radius: 50%;
+  box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-110vh) translateX(40px) scale(0); opacity: 0; }
+}
 
-/* جسيمات ضوئية */
-.particles { position: absolute; inset: 0; pointer-events: none; }
-.particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; }
-@keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.5; } 100% { transform: translateY(-110vh) scale(0.3); opacity: 0; } }
-
-/* ================= APP LAYOUT ================= */
+/* ================= التطبيق ================= */
 .app { position: relative; z-index: 10; height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
 
 /* شاشة العرض */
 .display-container { flex: 1; padding: 20px; display: flex; align-items: center; justify-content: center; }
 .display-box {
   width: 100%; max-width: 800px; height: 100%; max-height: 250px;
-  background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border); border-radius: 20px;
-  padding: 20px; font-size: 22px; line-height: 1.5;
-  overflow-y: auto; word-wrap: break-word; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 20px; font-size: 24px; line-height: 1.5;
+  overflow-y: auto; word-wrap: break-word; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
   direction: auto; text-align: right;
 }
 .display-box::-webkit-scrollbar { width: 4px; }
-.display-box::-webkit-scrollbar-thumb { background: var(--spider-red); border-radius: 10px; }
+.display-box::-webkit-scrollbar-thumb { background: var(--miles-red); border-radius: 10px; }
 .placeholder { color: rgba(255,255,255,0.3); font-style: italic; font-size: 18px; }
-.cursor { display: inline-block; width: 2px; height: 1.2em; background: var(--spider-red); vertical-align: middle; animation: blink 1s infinite; box-shadow: var(--neon-glow); }
+.cursor { display: inline-block; width: 2px; height: 1.2em; background: var(--miles-red); vertical-align: middle; animation: blink 1s infinite; box-shadow: 0 0 10px var(--miles-red); }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 
-/* ================= KEYBOARD AREA ================= */
-.keyboard-wrapper { padding: 10px 10px calc(15px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to bottom, rgba(6,6,10,0.7), rgba(6,6,10,0.95)); border-top: 1px solid var(--glass-border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 -10px 40px rgba(230,36,41,0.15); }
+/* ================= الكيبورد ================= */
+.keyboard-wrapper { 
+  padding: 10px 10px calc(15px + env(safe-area-inset-bottom, 0px)); 
+  background: linear-gradient(to bottom, rgba(6,6,10,0.8), rgba(6,6,10,0.98)); 
+  border-top: 1px solid rgba(230, 36, 41, 0.4); 
+  backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+  box-shadow: 0 -10px 50px rgba(0, 210, 255, 0.1); 
+}
 
-/* شريط اختيار اللغة */
+/* شريط اللغة */
 .lang-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
 .lang-bar::-webkit-scrollbar { display: none; }
-.lang-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s; white-space: nowrap; }
-.lang-btn.active { background: var(--spider-red); color: white; border-color: var(--spider-red); box-shadow: var(--neon-glow); }
+.lang-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s; white-space: nowrap; }
+.lang-btn.active { background: rgba(230, 36, 41, 0.2); color: #fff; border-color: var(--miles-red); box-shadow: 0 0 15px rgba(230,36,41,0.5); }
 
-/* صفوف الكيبورد */
+/* الصفوف */
 .keyboard { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
 .kb-row { display: flex; gap: 6px; justify-content: center; }
 
 /* الأزرار */
 .key {
-  flex: 1; min-width: 0; height: 54px; border: none; border-radius: 10px;
-  background: linear-gradient(180deg, #2a2a35 0%, #1a1a22 100%);
-  color: var(--white); font-family: 'Cairo', sans-serif; font-size: 22px; font-weight: 700;
+  flex: 1; min-width: 0; height: 52px; border: none; border-radius: 10px;
+  background: linear-gradient(180deg, rgba(40,40,50,0.9) 0%, rgba(20,20,25,0.9) 100%);
+  color: #fff; font-family: 'Cairo', sans-serif; font-size: 22px; font-weight: 700;
   cursor: pointer; position: relative; overflow: hidden;
-  box-shadow: 0 4px 0 #0a0a0f, 0 5px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.8), 0 5px 10px rgba(0,0,0,0.6);
   transition: transform 0.05s, box-shadow 0.05s, background 0.2s;
   display: flex; align-items: center; justify-content: center; touch-action: manipulation;
 }
-.key:active, .key.pressed { transform: translateY(4px); box-shadow: 0 0 0 #0a0a0f, 0 0 20px var(--spider-red), inset 0 2px 5px rgba(0,0,0,0.5); background: linear-gradient(180deg, #3a3a45 0%, #2a2a35 100%); }
+.key:active, .key.pressed { 
+  transform: translateY(4px); 
+  box-shadow: 0 0 0 rgba(0,0,0,0.8), 0 0 20px var(--miles-blue), inset 0 2px 5px rgba(0,0,0,0.8); 
+  background: linear-gradient(180deg, rgba(60,60,70,0.9) 0%, rgba(30,30,40,0.9) 100%);
+  border-color: var(--miles-blue);
+}
 
 /* المفاتيح الخاصة */
-.key.special { background: linear-gradient(180deg, var(--spider-blue-light) 0%, var(--spider-blue) 100%); box-shadow: 0 4px 0 #050a14, 0 5px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2); }
-.key.special:active, .key.special.pressed { box-shadow: 0 0 0 #050a14, 0 0 20px #4a7cff, inset 0 2px 5px rgba(0,0,0,0.5); background: linear-gradient(180deg, #2a5caa 0%, #1a3c75 100%); }
+.key.special { background: linear-gradient(180deg, rgba(230, 36, 41, 0.8) 0%, rgba(150, 20, 25, 0.9) 100%); border-color: rgba(255,100,100,0.3); }
+.key.special:active, .key.special.pressed { box-shadow: 0 0 0 rgba(0,0,0,0.8), 0 0 25px var(--miles-red), inset 0 2px 5px rgba(0,0,0,0.8); }
+.key.space { background: linear-gradient(180deg, rgba(20,20,25,0.9) 0%, rgba(10,10,15,0.9) 100%); }
+.key.shift-on { background: linear-gradient(180deg, var(--miles-blue) 0%, #0088aa 100%); color: #000; box-shadow: 0 4px 0 #004455, 0 0 15px var(--miles-blue); border-color: #fff; }
 
-/* مفتاح المسافة والـ Shift */
-.key.space { background: linear-gradient(180deg, var(--spider-red) 0%, var(--spider-red-dark) 100%); box-shadow: 0 4px 0 #5a0b0d, 0 5px 10px rgba(0,0,0,0.5); }
-.key.space:active { box-shadow: 0 0 0 #5a0b0d, 0 0 30px var(--spider-red); }
-.key.shift-on { background: linear-gradient(180deg, #ffd700 0%, #b38f00 100%); color: #000; box-shadow: 0 4px 0 #665200, 0 0 15px #ffd700; }
-
-/* أحجام المفاتيح */
-.w-2 { flex: 2; } .w-3 { flex: 3; } .w-4 { flex: 4; } .w-5 { flex: 5; }
+/* الأحجام */
+.w-2 { flex: 2; } .w-3 { flex: 3; } .w-5 { flex: 5; }
 
 /* أيقونة العنكبوت */
 .spider-icon { width: 28px; height: 28px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); transition: transform 0.3s; }
-.key.space:active .spider-icon { transform: scale(1.2) rotate(15deg); }
-
-/* ================= SPLAT EFFECT (تأثير إطلاق الشبكة) ================= */
-.splat {
-  position: fixed; pointer-events: none; width: 80px; height: 80px; z-index: 9999;
-  transform: translate(-50%, -50%);
-  animation: splatAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-@keyframes splatAnim {
-  0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); opacity: 1; }
-  50% { opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(2.5) rotate(90deg); opacity: 0; }
-}
+.key.space:active .spider-icon { transform: scale(1.2) rotate(15deg); filter: drop-shadow(0 0 15px var(--miles-red)); }
 
 /* استجابة الشاشات الصغيرة */
 @media (max-height: 700px) {
@@ -125,117 +132,40 @@ html, body { height: 100%; overflow: hidden; font-family: 'Cairo', sans-serif; b
 </head>
 <body>
 
-<!-- ================= الخلفية المتحركة ================= -->
-<div class="bg-container">
-  <svg class="web-pattern" viewBox="0 0 400 400">
-    <g stroke="#ffffff" stroke-width="1" fill="none">
-      <line x1="200" y1="200" x2="400" y2="200"/><line x1="200" y1="200" x2="341" y2="341"/><line x1="200" y1="200" x2="200" y2="400"/><line x1="200" y1="200" x2="59" y2="341"/><line x1="200" y1="200" x2="0" y2="200"/><line x1="200" y1="200" x2="59" y2="59"/><line x1="200" y1="200" x2="200" y2="0"/><line x1="200" y1="200" x2="341" y2="59"/>
-      <circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="80"/><circle cx="200" cy="200" r="130"/><circle cx="200" cy="200" r="180"/>
-    </g>
-  </svg>
-  <svg class="web-pattern-bottom" viewBox="0 0 400 400">
-    <g stroke="#e62429" stroke-width="1.5" fill="none">
-      <line x1="200" y1="200" x2="400" y2="200"/><line x1="200" y1="200" x2="341" y2="341"/><line x1="200" y1="200" x2="200" y2="400"/><line x1="200" y1="200" x2="59" y2="341"/><line x1="200" y1="200" x2="0" y2="200"/><line x1="200" y1="200" x2="59" y2="59"/><line x1="200" y1="200" x2="200" y2="0"/><line x1="200" y1="200" x2="341" y2="59"/>
-      <circle cx="200" cy="200" r="50"/><circle cx="200" cy="200" r="100"/><circle cx="200" cy="200" r="150"/>
-    </g>
-  </svg>
+<!-- الخلفية -->
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+<div class="embers" id="embers"></div>
 
-  <div class="hanging-spider">
-    <div class="spider-thread"></div>
-    <svg viewBox="0 0 24 24" fill="#e62429" width="30" height="30" style="margin: 0 auto; display: block;">
-      <ellipse cx="12" cy="14" rx="4" ry="5"/><circle cx="12" cy="8" r="2.5"/>
-      <path d="M10 3 L8 1 M14 3 L16 1 M9 5 L6 3 M15 5 L18 3 M8 9 L4 7 M16 9 L20 7 M8 12 L4 12 M16 12 L20 12 M8 15 L4 18 M16 15 L20 18 M9 18 L6 21 M15 18 L18 21" stroke="#e62429" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-    </svg>
-  </div>
-
-  <div class="particles" id="particles"></div>
-
-  <div class="city-skyline">
-    <svg viewBox="0 0 1000 260" preserveAspectRatio="none">
-      <path fill="#080812" d="M0,260 L0,140 L35,140 L35,90 L60,90 L60,130 L95,130 L95,60 L125,60 L125,105 L165,105 L165,75 L195,75 L195,150 L235,150 L235,55 L265,55 L265,95 L305,95 L305,135 L335,135 L335,80 L370,80 L370,40 L395,40 L395,100 L435,100 L435,90 L475,90 L475,145 L515,145 L515,70 L555,70 L555,110 L595,110 L595,50 L635,50 L635,95 L675,95 L675,135 L715,135 L715,60 L755,60 L755,100 L795,100 L795,80 L835,80 L835,125 L875,125 L875,70 L915,70 L915,115 L955,115 L955,90 L1000,90 L1000,260 Z"/>
-      <g fill="#e62429" opacity="0.6">
-        <rect x="45" y="100" width="2" height="3"/><rect x="115" y="90" width="2" height="3"/><rect x="245" y="70" width="2" height="3"/><rect x="445" y="110" width="2" height="3"/><rect x="645" y="110" width="2" height="3"/><rect x="805" y="100" width="2" height="3"/>
-      </g>
-    </svg>
-  </div>
-</div>
-
-<!-- ================= التطبيق ================= -->
+<!-- التطبيق -->
 <div class="app">
   <div class="display-container">
     <div class="display-box" id="display">
-      <span class="placeholder" id="placeholder">جرب الكتابة بأي لغة... كل ضغطة تطلق شبكة عنكبوت 🕸️</span><span id="text"></span><span class="cursor"></span>
+      <span class="placeholder" id="placeholder">اكتب هنا... واشعر بقوة سبايدر مان 🔥</span><span id="text"></span><span class="cursor"></span>
     </div>
   </div>
 
   <div class="keyboard-wrapper">
-    <!-- شريط اللغات -->
     <div class="lang-bar" id="lang-bar"></div>
-    
-    <!-- الكيبورد -->
     <div class="keyboard" id="keyboard"></div>
   </div>
 </div>
 
 <script>
-// ================= البيانات (اللغات) =================
-const langNames = {
-  ar: 'العربية', en: 'English', fr: 'Français', es: 'Español', ru: 'Русский'
-};
-
+// ================= اللغات =================
+const langNames = { ar: 'العربية', en: 'English', fr: 'Français', es: 'Español', ru: 'Русский' };
 const layouts = {
-  ar: [
-    ['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج'],
-    ['ش','س','ي','ب','ل','ا','ت','ن','م','ك','ط'],
-    ['SHIFT','ئ','ء','ؤ','ر','لا','ى','ة','و','ز','ظ','DEL'],
-    ['NUM','LANG_AR','SPACE','ENTER']
-  ],
-  en: [
-    ['q','w','e','r','t','y','u','i','o','p'],
-    ['a','s','d','f','g','h','j','k','l'],
-    ['SHIFT','z','x','c','v','b','n','m','DEL'],
-    ['NUM','LANG_EN','SPACE','ENTER']
-  ],
-  fr: [
-    ['a','z','e','r','t','y','u','i','o','p'],
-    ['q','s','d','f','g','h','j','k','l','m'],
-    ['SHIFT','w','x','c','v','b','n',',','.','DEL'],
-    ['NUM','LANG_FR','SPACE','ENTER']
-  ],
-  es: [
-    ['q','w','e','r','t','y','u','i','o','p'],
-    ['a','s','d','f','g','h','j','k','l','ñ'],
-    ['SHIFT','z','x','c','v','b','n','m','DEL'],
-    ['NUM','LANG_ES','SPACE','ENTER']
-  ],
-  ru: [
-    ['й','ц','у','к','е','н','г','ш','щ','з','х','ъ'],
-    ['ф','ы','в','а','п','р','о','л','д','ж','э'],
-    ['SHIFT','я','ч','с','м','и','т','ь','б','ю','DEL'],
-    ['NUM','LANG_RU','SPACE','ENTER']
-  ],
-  num: [
-    ['1','2','3','4','5','6','7','8','9','0'],
-    ['-','/',':',';','(',')','$','&','@','"'],
-    ['#+=','.',',','?','!',"'",'DEL'],
-    ['LANG_AR','SPACE','ENTER']
-  ],
-  sym: [
-    ['[',']','{','}','#','%','^','*','+','='],
-    ['_','\\','|','~','<','>','€','£','¥','•'],
-    ['NUM','.',',','?','!',"'",'DEL'],
-    ['LANG_AR','SPACE','ENTER']
-  ]
+  ar: [['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج'],['ش','س','ي','ب','ل','ا','ت','ن','م','ك','ط'],['SHIFT','ئ','ء','ؤ','ر','لا','ى','ة','و','ز','ظ','DEL'],['NUM','LANG_AR','SPACE','ENTER']],
+  en: [['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l'],['SHIFT','z','x','c','v','b','n','m','DEL'],['NUM','LANG_EN','SPACE','ENTER']],
+  fr: [['a','z','e','r','t','y','u','i','o','p'],['q','s','d','f','g','h','j','k','l','m'],['SHIFT','w','x','c','v','b','n',',','.','DEL'],['NUM','LANG_FR','SPACE','ENTER']],
+  es: [['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l','ñ'],['SHIFT','z','x','c','v','b','n','m','DEL'],['NUM','LANG_ES','SPACE','ENTER']],
+  ru: [['й','ц','у','к','е','н','г','ш','щ','з','х','ъ'],['ф','ы','в','а','п','р','о','л','д','ж','э'],['SHIFT','я','ч','с','м','и','т','ь','б','ю','DEL'],['NUM','LANG_RU','SPACE','ENTER']],
+  num: [['1','2','3','4','5','6','7','8','9','0'],['-','/',':',';','(',')','$','&','@','"'],['#+=','.',',','?','!',"'",'DEL'],['LANG_AR','SPACE','ENTER']],
+  sym: [['[',']','{','}','#','%','^','*','+','='],['_','\\','|','~','<','>','€','£','¥','•'],['NUM','.',',','?','!',"'",'DEL'],['LANG_AR','SPACE','ENTER']]
 };
 
 // ================= الحالة =================
-const state = {
-  currentLang: 'ar',
-  layout: 'ar',
-  shift: false,
-  capsLock: false,
-  text: ''
-};
+const state = { currentLang: 'ar', layout: 'ar', shift: false, capsLock: false, text: '' };
 let lastShiftTap = 0;
 
 // ================= بناء شريط اللغات =================
@@ -247,11 +177,8 @@ function renderLangBar() {
     btn.className = `lang-btn ${state.currentLang === code ? 'active' : ''}`;
     btn.textContent = langNames[code];
     btn.onclick = () => {
-      state.currentLang = code;
-      state.layout = code;
-      renderLangBar();
-      renderKeyboard();
-      vibrate();
+      state.currentLang = code; state.layout = code;
+      renderLangBar(); renderKeyboard(); vibrate();
     };
     bar.appendChild(btn);
   });
@@ -261,7 +188,6 @@ function renderLangBar() {
 function renderKeyboard() {
   const kb = document.getElementById('keyboard');
   kb.innerHTML = '';
-  
   const currentLayout = layouts[state.layout] || layouts['ar'];
   
   currentLayout.forEach(rowKeys => {
@@ -274,7 +200,6 @@ function renderKeyboard() {
       btn.dataset.key = key;
       let isSpecial = false;
       
-      // معالجة المفاتيح الخاصة
       if (key === 'SHIFT') {
         btn.innerHTML = '⇧'; isSpecial = true;
         if (state.shift || state.capsLock) btn.classList.add('shift-on');
@@ -293,18 +218,15 @@ function renderKeyboard() {
       } else if (key === 'ENTER') {
         btn.innerHTML = '↵'; isSpecial = true; btn.classList.add('w-3');
       } else {
-        // الحروف العادية
         btn.textContent = (state.shift || state.capsLock) && ['en','fr','es','ru'].includes(state.layout) ? key.toUpperCase() : key;
       }
       
       if (isSpecial && !btn.classList.contains('space')) btn.classList.add('special');
       
-      // حدث الضغط
       btn.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         handleKey(key, btn, e.clientX, e.clientY);
       });
-      
       rowEl.appendChild(btn);
     });
     kb.appendChild(rowEl);
@@ -314,118 +236,108 @@ function renderKeyboard() {
 // ================= منطق الضغط =================
 function handleKey(key, btn, x, y) {
   btn.classList.add('pressed');
-  setTimeout(() => btn.classList.remove('pressed'), 100);
+  setTimeout(() => btn.classList.remove('pressed'), 80);
   
-  createSplat(x, y);
+  // تشغيل صوت النار والاهتزاز
+  playFireIgnite();
   vibrate();
-  playThwip();
   
-  // تبديل الحالة
   if (key === 'SHIFT') {
     const now = Date.now();
     if (now - lastShiftTap < 350) { state.capsLock = !state.capsLock; state.shift = false; }
     else { state.shift = !state.shift; }
-    lastShiftTap = now;
-    renderKeyboard(); return;
+    lastShiftTap = now; renderKeyboard(); return;
   }
   if (key === 'DEL') { state.text = state.text.slice(0, -1); updateText(); return; }
   if (key === 'NUM') { state.layout = 'num'; renderKeyboard(); return; }
   if (key === '#+=') { state.layout = 'sym'; renderKeyboard(); return; }
-  if (key.startsWith('LANG_')) { 
-    // العودة للغة المحددة في الشريط
-    state.layout = state.currentLang; 
-    renderKeyboard(); return; 
-  }
+  if (key.startsWith('LANG_')) { state.layout = state.currentLang; renderKeyboard(); return; }
   
-  // كتابة الحروف
   if (key === 'SPACE') state.text += ' ';
   else if (key === 'ENTER') state.text += '\n';
   else {
     let char = key;
-    if (['en','fr','es','ru'].includes(state.layout) && (state.shift || state.capsLock)) {
-      char = key.toUpperCase();
-    }
+    if (['en','fr','es','ru'].includes(state.layout) && (state.shift || state.capsLock)) char = key.toUpperCase();
     state.text += char;
     if (state.shift && !state.capsLock) { state.shift = false; renderKeyboard(); }
   }
-  
   updateText();
 }
 
-// ================= تحديث الشاشة =================
 function updateText() {
   const ph = document.getElementById('placeholder');
   const txt = document.getElementById('text');
   const disp = document.getElementById('display');
-  
-  if (state.text.length === 0) {
-    ph.style.display = 'inline';
-    txt.textContent = '';
-  } else {
-    ph.style.display = 'none';
-    txt.textContent = state.text;
-    // تحديد اتجاه النص تلقائياً (يمين للعربية، يسار للإنجليزية)
+  if (state.text.length === 0) { ph.style.display = 'inline'; txt.textContent = ''; }
+  else {
+    ph.style.display = 'none'; txt.textContent = state.text;
     disp.style.direction = /[\u0600-\u06FF]/.test(state.text) ? 'rtl' : 'ltr';
     disp.style.textAlign = /[\u0600-\u06FF]/.test(state.text) ? 'right' : 'left';
   }
   disp.scrollTop = disp.scrollHeight;
 }
 
-// ================= المؤثرات (الصوت والاهتزاز والرشة) =================
-function vibrate() {
-  if (navigator.vibrate) navigator.vibrate(15);
-}
+// ================= المؤثرات =================
+function vibrate() { if (navigator.vibrate) navigator.vibrate(12); }
 
+// 🔊 صوت اشتعال النار (Fire Ignite Sound)
 let audioCtx;
-function playThwip() {
+function playFireIgnite() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    
+    // 1. صوت فحيح الهواء (Noise)
+    const bufferSize = audioCtx.sampleRate * 0.15; // 150ms
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; // White noise
+    
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    
     const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, now);
+    filter.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+    filter.Q.value = 1.2;
     
-    // صوت إطلاق الشبكة (Thwip)
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(800, now);
-    osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.25, now + 0.02); // هجوم سريع
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15); // تلاشي سريع
     
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(4000, now);
-    filter.frequency.exponentialRampToValueAtTime(500, now + 0.1);
+    noise.connect(filter).connect(gain).connect(audioCtx.destination);
+    noise.start(now);
     
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    // 2. صوت الاشتعال العميق (Thud)
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(100, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
     
-    osc.connect(filter).connect(gain).connect(audioCtx.destination);
+    const oscGain = audioCtx.createGain();
+    oscGain.gain.setValueAtTime(0.15, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    
+    osc.connect(oscGain).connect(audioCtx.destination);
     osc.start(now); osc.stop(now + 0.1);
   } catch(e) {}
 }
 
-function createSplat(x, y) {
-  const s = document.createElement('div');
-  s.className = 'splat';
-  s.style.left = x + 'px'; s.style.top = y + 'px';
-  s.innerHTML = `<svg viewBox="0 0 70 70" width="80" height="80"><g stroke="rgba(255,255,255,0.9)" stroke-width="2" fill="none" stroke-linecap="round"><line x1="35" y1="35" x2="4" y2="4"/><line x1="35" y1="35" x2="66" y2="4"/><line x1="35" y1="35" x2="4" y2="66"/><line x1="35" y1="35" x2="66" y2="66"/><line x1="35" y1="35" x2="35" y2="2"/><line x1="35" y1="35" x2="35" y2="68"/><line x1="35" y1="35" x2="2" y2="35"/><line x1="35" y1="35" x2="68" y2="35"/><circle cx="35" cy="35" r="12"/><circle cx="35" cy="35" r="24"/></g></svg>`;
-  document.body.appendChild(s);
-  setTimeout(() => s.remove(), 500);
-}
-
-// ================= الجسيمات =================
-function createParticles() {
-  const c = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
+// ================= شرارات النار =================
+function createEmbers() {
+  const c = document.getElementById('embers');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div'); p.className = 'ember';
     const size = 2 + Math.random() * 4;
     p.style.width = size + 'px'; p.style.height = size + 'px';
     p.style.left = Math.random() * 100 + '%';
-    p.style.bottom = '-10px';
     const isRed = Math.random() > 0.5;
-    p.style.background = isRed ? '#e62429' : '#ffffff';
-    p.style.boxShadow = `0 0 ${8 + Math.random()*10}px ${isRed ? '#e62429' : '#ffffff'}`;
-    p.style.animationDuration = (5 + Math.random() * 8) + 's';
+    p.style.background = isRed ? '#ff4500' : '#ff8c00';
+    p.style.boxShadow = `0 0 ${6 + Math.random()*10}px ${isRed ? '#ff4500' : '#ff8c00'}`;
+    p.style.animationDuration = (3 + Math.random() * 5) + 's';
     p.style.animationDelay = (Math.random() * 5) + 's';
     c.appendChild(p);
   }
@@ -434,7 +346,7 @@ function createParticles() {
 // ================= التشغيل =================
 renderLangBar();
 renderKeyboard();
-createParticles();
+createEmbers();
 </script>
 </body>
 </html>
